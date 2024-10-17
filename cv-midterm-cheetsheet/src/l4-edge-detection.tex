@@ -1,0 +1,66 @@
+\section{Edge detection}
+% \subsection*{What Causes an Edge?}
+% \begin{itemize}
+%     \item \textbf{Depth discontinuity}: Object boundaries.
+%     \item \textbf{Surface orientation changes}: Shape variations.
+%     \item \textbf{Cast shadows}: Lighting effects.
+%     \item \textbf{Reflectance change}: Differences in texture or material appearance.
+% \end{itemize}
+
+\subsection*{Derivatives and Gradients}
+% \textbf{First derivative:} Detects rapid changes in intensity (edge points align with peaks in derivative). 
+
+\textbf{Image Gradient:} Measures the rate and direction of intensity change. 
+
+\textbf{Gradient Magnitude/Direction (Edge Strength/Orientation)}
+\[
+|\nabla I| = \sqrt{\left(\frac{\partial I}{\partial x}\right)^2 + \left(\frac{\partial I}{\partial y}\right)^2},
+\quad
+\theta = \tan^{-1}\left(\frac{\partial I / \partial y}{\partial I / \partial x}\right)
+\]
+
+% \textbf{Gradient Direction (Orientation)}
+% \[
+% \theta = \tan^{-1}\left(\frac{\partial I / \partial y}{\partial I / \partial x}\right)
+% \]
+
+\subsection*{Edge Detection Filters}
+\textbf{Sobel Filter:} compute gradients.
+\[
+\text{Horizontal} = 
+\begin{bmatrix}
+-1 & 0 & 1 \\
+-2 & 0 & 2 \\
+-1 & 0 & 1
+\end{bmatrix}
+% \quad
+% \text{Vertical} = 
+% \begin{bmatrix}
+% -1 & -2 & -1 \\
+% 0 & 0 & 0 \\
+% 1 & 2 & 1
+% \end{bmatrix}
+\]
+
+\textbf{Prewitt Filter:} Change 2 in Sobel to 1 for noise robustness.
+% \[
+% \text{Horizontal} = 
+% \begin{bmatrix}
+% -1 & 0 & 1 \\
+% -1 & 0 & 1 \\
+% -1 & 0 & 1
+% \end{bmatrix}
+% \quad
+% \text{Vertical} = 
+% \begin{bmatrix}
+% -1 & -1 & -1 \\
+% 0 & 0 & 0 \\
+% 1 & 1 & 1
+% \end{bmatrix}
+% \]
+\subsection*{Canny Edge Detection Steps}
+1. \textbf{Smoothing}: w a Gaussian filter.\\
+2. \textbf{Gradient Calculation}: Compute gradients w Sobel filters.\\
+3. \textbf{Non-Maximum Suppression}: Retain local maxima along the grad direction to thin the edges.\\
+% 4. \textbf{Hysteresis Thresholding}: A \textbf{high thres} to start edges and a \textbf{low thres} to continue edges.
+4. \textbf{Thresholding}: A \textbf{high thres} to start edges and a \textbf{low thres} to continue edges.

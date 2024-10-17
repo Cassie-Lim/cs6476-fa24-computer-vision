@@ -1,0 +1,69 @@
+\section{Fitting a 2D Transformation}
+% 1. Given two images, the goal is to learn a transformation \(T\) that aligns them. \\
+% 2. Transformation \(T\) can be fit using matching feature pairs called correspondences. \\
+
+\subsection*{Parametric Warping}
+1. Transformation \(T\) can take different forms: \\
+   - Translation, Rotation, Scaling, Affine, and Perspective. \\
+2. These transformations can be represented as matrix operations, such as:
+   \[
+   \mathbf{p'} = \mathbf{T} \cdot \mathbf{p}
+   \]
+   % where \(\mathbf{p} = (x, y)\) and \(\mathbf{p'} = (x', y')\) are points in the original and transformed space.
+
+\subsection*{Basic Transformations as Matrices}
+1. \textbf{Scaling}, \quad \textbf{Rotation}: \\
+   \[
+   \mathbf{S} = 
+   \begin{bmatrix}
+   s_x & 0 \\
+   0 & s_y
+   \end{bmatrix}, \quad
+   \mathbf{R} =
+   \begin{bmatrix}
+   \cos \theta & -\sin \theta \\
+   \sin \theta & \cos \theta
+   \end{bmatrix}
+   \] 
+2. \textbf{Shear}, \quad \textbf{Translation}: \\
+   \[
+   \mathbf{S} = 
+   \begin{bmatrix}
+   1 & \alpha \\
+   \beta & 1
+   \end{bmatrix}, \quad
+   \mathbf{T} =
+   \begin{bmatrix}
+   1 & 0 & t_x \\
+   0 & 1 & t_y \\
+   0 & 0 & 1
+   \end{bmatrix}
+   \]
+
+\subsection*{Affine Transformations}
+1. Combine linear transformations (scaling, rotation, shear) and translation:
+   \[
+   \mathbf{A} =
+   \begin{bmatrix}
+   a_{11} & a_{12} & t_x \\
+   a_{21} & a_{22} & t_y \\
+   0 & 0 & 1
+   \end{bmatrix}
+   \]
+2. Parallel lines remain parallel under affine transformations.
+
+\subsection*{Using RANSAC for Robust Fitting}
+1. RANSAC (Random Sample Consensus):
+   - Randomly select a set of pts, estimate the transformation. \\
+   - Compute the transformation and identify inliers. \\
+   - If enough inliers, recompute the transformation with all inliers. \\
+2. Keep the transformation with the most inliers across multiple trials.
+
+\subsection*{Summary of RANSAC}
+1. \textbf{Pros}: \\
+   - Robust to noise \& outliers(extremely x). \\
+   % - Works well for a variety of problems. \\
+2. \textbf{Cons}: \\
+   - Requires careful tuning of hyperparams. \\
+   - Perf drops with low inlier ratios. \\
+   - Can struggle with poor initialization based on minimum samples.

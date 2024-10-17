@@ -1,0 +1,50 @@
+\section{Image filtering}
+\subsection*{Digital Image formation}
+1. Formation of image: illumination + scene element + imaging system + image plane\\
+2. Digital camera: sample 2d space on regular grid \& quantize each sample (round to nearest integer)
+\subsection*{Image noise, filtering, conv}
+1. \textbf{common types of noise}: salt/pepper noise, impulse noise (random occurrences of white pixels), Guassian noise\\
+2. \textbf{Cross correlation} filtering $G=H\otimes F$: \\
+$G[i,j] = \sum_{u=-k}^{k} \sum_{v=-k}^{k} H[u, v] F[i+u, j+v]$ \\
+\textbf{Convolution} (cross correlation will flip the img):\\
+$G[i,j] = \sum_{u=-k}^{k} \sum_{v=-k}^{k} H[u, v] F[i-u, j-v]$\\
+box filter, \quad Gaussian filter:
+\[
+ \frac{1}{9}
+\begin{bmatrix}
+ 1 & 1&1 \\
+ 1&?&1 \\
+ 1&1&1
+\end{bmatrix}, \quad
+\frac{1}{16}
+\begin{bmatrix}
+ 1&2&1 \\
+ 2&4&2 \\
+ 1&2&1
+\end{bmatrix}
+\]
+3. Runtime complexity: 
+$O(C_{in} \cdot C_{out} \cdot N^2 \cdot M^2)
+$ \\
+4. Separability:  
+$1D gs * 1D gs = 2D gs$\\
+$Image * 2D gs = Image * 1D gs * 1D gs$
+5. Smoothing: remove high-freq components (low pass filter) \\
+6. Prop of convs:\\
+a. Commutative: f*g = g*f \\
+b. Associative: (f*g)*h = f*(g*h) \\
+c. Distributive over +: l*(f1+f2) = l*f1+l*f2 \\
+d. Shift invariant shift(l*f) = shift(l)*f \\
+7. \textbf{Sharpening filter} (image - smoothed =  details):
+positive in the middle \& negative around \\
+7. \textbf{Nonlinear filter}: median filter \\
+9.\textbf{ hybrid image}: 
+Laplacian filter(identify rapid change) ~ unit impulse - Gaussian
+\[
+\mathbf{K} = 
+\begin{bmatrix}
+0 & -1 & 0 \\
+-1 & 4 & -1 \\
+0 & -1 & 0
+\end{bmatrix}
+\]

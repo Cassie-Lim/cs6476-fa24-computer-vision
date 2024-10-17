@@ -1,0 +1,101 @@
+\section{Stereo and Camera Calibration}
+% 1. \textbf{Stereo Vision:} recover the 3D structure of a scene from multiple 2D images. \\
+% 2. \textbf{Single-View Limitation:} depth information is ambiguous as each pixel only provides a ray. \\
+
+\subsection*{Stereo Vision}
+1. \textbf{Stereo Vision Setup:} Two or more cams capture the scene from slightly different viewpoints. \\
+% 2. \textbf{Correspondences:} Matching points (features) in the images are identified to calculate depth. \\
+% 3. \textbf{Epipolar Geometry:} A key concept in stereo vision that defines the relationship between two views. \\
+2. \textbf{Disparity:} The difference in the position of corresponding pts between the two images. Depth is inversely proportional to disparity:
+   \[
+   \text{Depth} = \frac{f \cdot B}{\text{Disparity}}
+   \]
+   where \(f\) is the focal length, and \(B\) is the baseline (distance between the cameras). \\
+
+
+
+\subsection*{Projection Matrix and Calibration Process}
+\textbf{Projection Model:} 
+% 1. The full projection matrix relates world coordinates to image coordinates:
+   % \[
+   % p = MX, M = K [R | t]
+   % \]
+   \[
+   \mathbf{p} = \lambda M \mathbf{X}
+   \]
+   where \(M = K [R | t]\), \(3 \times 4\) projection matrix \\
+% 1. \textbf{Camera calibration:} Estimates the intrinsic matrix \(K\) and extrinsic parameters \([R | t]\) to convert 3D points to 2D image coordinates.   \\
+1. \textbf{Camera calibration:} Estimates M given p, X.   \\
+- \textbf{Calibration Targets:} Objects with known dimensions (like checkerboards) \\
+% are used to find correspondences and solve for the calibration matrix. \\
+- \textbf{Linear Calibration Method:} Uses correspondences between 3D points and their projections to estimate \(M\). \\
+   % - \textbf{Projection Model:} 
+   %   \[
+   %   \mathbf{p} = \lambda M \mathbf{X},
+   %   \]
+   - \textbf{Linearization via Cross-Product:} The projection model is linearized as:
+     \[
+     \mathbf{p} \times (M \mathbf{X}) = 0.
+     \]
+       \[
+       \begin{bmatrix}
+       u_i \\
+       v_i \\
+       1
+       \end{bmatrix}
+       \times
+       \begin{bmatrix}
+       m_1^T \mathbf{X}_i \\
+       m_2^T \mathbf{X}_i \\
+       m_3^T \mathbf{X}_i
+       \end{bmatrix}
+       =
+       \begin{bmatrix}
+       0 \\
+       0 \\
+       0
+       \end{bmatrix}.
+       \]
+    \[
+   \begin{bmatrix}
+       0^T & -\mathbf{X}_i^T & v_i \mathbf{X}_i^T \\
+       \mathbf{X}_i^T & 0^T & -u_i \mathbf{X}_i^T \\
+       -v_i \mathbf{X}_i^T & u_i \mathbf{X}_i^T & 0^T
+       \end{bmatrix}
+       \begin{bmatrix}
+       m_1 \\
+       m_2 \\
+       m_3
+       \end{bmatrix}
+       =
+       \begin{bmatrix}
+       0 \\
+       0 \\
+       0
+       \end{bmatrix}.
+    \]
+    \textbf{Note: }2 linearly independent eqs per correspondence, M (3x4) 11 deg of freedom\\
+   - \textbf{Stacking Equations:}  For \(n\) correspondences:
+      \[
+       A \mathbf{m} = 0,
+   \]
+   where \(A\) is a \(2n \times 12\) matrix and \(\mathbf{m}\) contains 12 unknown entries of \(M\).
+
+   - \textbf{Solving the System:} Use SVD to find the eigenvector of \(A^T A\) corresponding to the smallest eigenvalue, providing an initial estimate of \(M\). \\
+   % - \textbf{Refinement with Non-linear Optimization:} A non-linear optimizer (e.g., Levenberg-Marquardt) refines the solution to handle noise and improve accuracy. \\
+  - Note: Can use a\textbf{ non-linear optimizer} (e.g., Levenberg-Marquardt) to handle noise and improve accuracy. \\
+
+2. \textbf{Triangulation:} Given M,p --> X\\
+% Given multiple images and correspondences, triangulation computes the 3D location of a point by finding the intersection of rays from each camera. \\
+   - \textbf{Method 1: Geometric Approach}  
+     Find the shortest segment between viewing rays and select the midpoint of this segment. \\
+   - \textbf{Method 2: Non-linear Optimization}  
+     % Minimize the reprojection error by finding the point \(X\) that minimizes:
+     \[
+     X = argmin (
+     \sum_i d(\mathbf{p}_i, M_i X)^2 ),
+     \]
+% \subsection*{Summary}
+% 1. \textbf{Stereo vision} recovers depth by matching points across multiple images. \\
+% 2. \textbf{Camera calibration} finds the intrinsic and extrinsic parameters to project 3D points into 2D. \\
+% 3. Understanding these principles is essential for tasks such as depth estimation, 3D reconstruction, and structure from motion.

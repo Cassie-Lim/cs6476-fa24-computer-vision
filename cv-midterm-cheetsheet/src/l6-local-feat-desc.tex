@@ -1,0 +1,35 @@
+\section{Local Feature Description}
+
+% \subsection*{Local Feature Detection and Description}
+% 1. Detection: Identify interest points using methods like the Harris Corner Detector or Blob Detector. \\
+% 2. Description: Extract vector feature descriptors surrounding each interest point. \\
+% 3. Matching: Determine correspondences between descriptors in different views.
+
+\subsection*{SIFT Descriptor (Lowe, 2004)}
+1. Compute gradients within sub-patches --> histograms of gradient orientations. \\
+2. Rotate the patch based on dominant gradient --> rotation invariance. \\
+3. Map pixels to a 128-dimensional vec. \\
+4. Invariance to scale and rotation, partial invariance to illumination changes, capable of handling occlusion.
+
+\subsection*{Blob Detection and Difference of Gaussians (DoG)}
+1. Key: identifying maxima or minima in both position and scale. \\
+2. The Laplacian of Gaussian (LoG) can be approximated with DoG for better efficiency:
+   \[
+   \text{DoG}(x, y, \sigma) = G(x, y, k\sigma) - G(x, y, \sigma)
+   \]
+3. The characteristic scale corresponds to the peak LoG response, capturing feature blobs across multiple scales.
+
+\subsection*{Matching Techniques}
+1. Compute candidate matches w Sum of Squared Distances (SSD) etc. \\
+2. Use Nearest Neighbor Search with a thres of nearest to second-nearest descriptor. \\
+   \[
+   \text{Ratio} = \frac{\text{Distance to best match}}{\text{Distance to second-best match}}
+   \]
+   If the ratio is low, the match is reliable; if high, it may indicate ambiguity.
+
+% \subsection*{Applications of Local Invariant Features}
+% 1. Wide baseline stereo matching. \\
+% 2. Motion tracking and panoramas. \\
+% 3. Mobile robot navigation and 3D reconstruction. \\
+% 4. Object and scene recognition.
+

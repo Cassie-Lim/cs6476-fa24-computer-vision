@@ -1,0 +1,61 @@
+\section{Depth from Stereo \& Structure from Motion}
+
+\subsection*{Depth from Stereo:}
+1. \textbf{Goal:} Recover depth by finding corresponding points in two images (stereo matching). Depth is inversely related to disparity.
+   
+2. \textbf{Disparity:} 
+   - Disparity \( d = x - x' \), where \( x \) and \( x' \) are corresponding image coordinates in two views.
+   % - Depth \( z \) is related to disparity as:
+     \[
+     depth = \frac{f B}{d},
+     \]
+     \(d\): depth, \( f \) : focal length, \( B \) : baseline distance between cameras.
+
+3. \textbf{Stereo Matching Algorithm:}
+   - For each pixel in imgA, find corresponding epipolar line in imgB.
+   - Search along epipolar line and select  best match based on a similarity measure (e.g., SSD, normalized correlation).
+   - Triangulate to obtain depth.
+
+4. \textbf{Rectification:} Reproject image planes onto a common plane to transform epipolar lines into horizontal scanlines, simplifying correspondence search.
+
+5. \textbf{Basic Challenges:}
+   - Textureless regions: Hard to find unique correspondences.
+   - Repeated patterns: Ambiguity in matching points.
+   - Specular surfaces: Appearance changes with viewpoint.
+
+\subsection*{Structure from Motion (SfM):}
+1. \textbf{Goal:} Recover 3D structure and camera motion from multiple views.
+
+2. \textbf{Projection Model:}
+   - For a 3D point \( X_j \) and camera \( M_i \), the image point \( p_{ij} \) is given by:
+     \[
+     p_{ij} \equiv M_i X_j, \quad p_{ij} = M_i X_j.
+     \]
+   - \( M_i = K_i [R_i | t_i] \), \( K_i \) : intrinsic matrix,  \( R_i, t_i \): extrinsic parameters.
+
+3. \textbf{Ambiguities in SfM:}
+   - \textbf{Scale ambiguity:} Cannot determine absolute scale from motion alone.
+   - \textbf{Projective ambiguity:} Without constraints, reconstruction is only determined up to a projective transformation.
+   - \textbf{Affine ambiguity:} If parallel lines are known, ambiguity reduces to affine. Additional constraints can reduce ambiguity to similarity.
+
+4. \textbf{Affine Structure from Motion:}
+   - Use affine cameras for a simplified SfM approach. For \( m \) cameras and \( n \) points:
+     \[
+     p_{ij} \equiv A_i X_j + b_i,
+     \]
+      \( A_i \) : affine projection matrix. \( b_i \) :  translation.\\
+   - Factorize the measurement matrix to recover motion and structure:
+     \[
+     D = \begin{bmatrix} A_1 \\ \vdots \\ A_m \end{bmatrix} \begin{bmatrix} X_1 & \dots & X_n \end{bmatrix}.
+     \]
+
+5. \textbf{Triangulation in SfM:}
+   - Estimate the 3D points \( X_j \) by minimizing the reprojection error across all views:
+     \[
+     \sum_i \| p_{ij} - M_i X_j \|^2.
+     \]
+   - Use optimization techniques such as bundle adjustment to refine the structure and motion estimates.
+
+% \subsection*{Summary:}
+% - \textbf{Depth from Stereo:} Find correspondences between two images, compute disparity, and infer depth.
+% - \textbf{Structure from Motion:} Recover 3D structure and camera motion from multiple views, with challenges in handling ambiguities.

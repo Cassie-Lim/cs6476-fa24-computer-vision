@@ -1,0 +1,44 @@
+\section{Local Feature Detection}
+
+\subsection*{Desired Properties of Local Features}
+1. \textbf{Repeatability}: Detectable across images despite transformations.\\
+2. \textbf{Saliency}: Be distinct. \\
+3. \textbf{Efficiency}: Lighter than total pixels. \\
+4. \textbf{Locality}: Cover small, clutter-resistant regions.
+
+
+\subsection*{Corners as Interest Points}
+1. \textbf{Flat Region}: No intensity change in any direction. \\
+2. \textbf{Edge}: No change along the edge direction. \\
+3. \textbf{Corner}: Large change in all directions.
+\subsection*{Harris Corner Detector}
+Invariant to rotation, not scale\\
+1. \textbf{Compute $M$} for each image window:
+    \[
+    M = 
+    \begin{bmatrix}
+    \sum I_x^2 & \sum I_x I_y \\
+    \sum I_x I_y & \sum I_y^2
+    \end{bmatrix}
+    \] \\
+2. \textbf{Corner Response Function}:
+    \[
+    R = \det(M) - \alpha \cdot (\text{trace}(M))^2
+    \] \\
+3. \textbf{Thresholding}: Retain points with large $R$ values. \\
+4. \textbf{Non-Maximum Suppression}: Keep local maxima to avoid redundant corners.
+
+\subsection*{Blob Detection and Scale Selection}
+1. Scale-invariant but not rotation.\\
+2. \textbf{Laplacian of Gaussian (LoG)}:
+    \[
+    \nabla^2 G = \frac{\partial^2 G}{\partial x^2} + \frac{\partial^2 G}{\partial y^2}
+    \]
+3. \textbf{Characteristic Scale}: Scale at which the LoG response is maximized.
+
+\subsection*{Feature Matching}
+1. Extract keypoint features.\\
+2. Compute potential matches between images.\\
+3. Hypothesize transformation $T$ to align related matches.\\
+4. Verify transformation by checking for consistency across matches.
+

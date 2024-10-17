@@ -1,0 +1,53 @@
+\section{Homography and Image Mosaics}
+1. \textbf{Goal:} Use homography to align and stitch images into a seamless mosaic. \\
+2. \textbf{Homography:} A projective transformation that maps points from one image plane to another. \\
+   % - Allows mapping of rectangles to quadrilaterals and preserves straight lines (not necessarily parallel lines). \\
+   - Preserve straight lines, not necessarily parallel lines/length/angle. \\
+   - Represented by a 3x3 matrix \(H\):
+   \[
+   \mathbf{p'} = H \cdot \mathbf{p}
+   \]
+   % where \(\mathbf{p}\) and \(\mathbf{p'}\) are homogeneous coordinates of corresponding points in two images.
+
+\subsection*{Generating Image Mosaics}
+1. Capture a sequence of images from the same camera position. \\
+2. Compute the transformation between consecutive images w feature-based alignment. \\
+3. Use homography to transform and align images. \\
+4. Blend aligned images to create the final mosaic. \\
+% 5. Repeat for additional images to extend the mosaic.
+
+\subsection*{Image Warping and Reprojection}
+1. \textbf{Forward Warping:} 
+% Map each pixel in the source image to a new position:
+   \[
+   (x', y') = T(x, y)
+   \]
+   - If a pixel lands between two pixels in the target image, distribute its color among neighbors (splatting). \\
+2. \textbf{Inverse Warping:} 
+% Compute the source pixel for each target pixel using the inverse transformation:
+   \[
+   (x, y) = T^{-1}(x', y')
+   \]
+   - Interpolate color values from neighbors (e.g., nearest neighbor, bilinear interpolation).
+
+\subsection*{RANSAC for Homography Estimation}
+1. Randomly select 4 pairs of corresponding pts. \\
+2. Compute the homography matrix \(H\). \\
+3. Identify inliers—pairs that satisfy:
+   \[
+   \text{SSD}(\mathbf{p'}, H \cdot \mathbf{p}) < \epsilon
+   \]
+4. Keep the set of inliers w the largest size. \\
+5. Recompute \(H\) using all inliers w least squares.
+
+% \subsection*{Applications of Homography}
+% 1. \textbf{Image Mosaics:} Stitch images to create panoramic views. \\
+% 2. \textbf{Image Rectification:} Align images to correct geometric distortions. \\
+% 3. \textbf{Virtual Views:} Synthesize new viewpoints using homography and image warping.
+
+% \subsection*{Summary of Alignment and Warping}
+% 1. Write 2D transformations as matrix-vector multiplication. \\
+% 2. Use homogeneous coordinates to handle translations. \\
+% 3. Perform image warping using forward or inverse mapping. \\
+% 4. Fit transformations by solving for unknown parameters using corresponding points. \\
+% 5. Create mosaics by warping and stitching images aligned by homography.
