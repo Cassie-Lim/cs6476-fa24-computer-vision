@@ -1,0 +1,52 @@
+\section{NN, CNN}
+\subsection{Perceptron Learning Algorithm (PLA)}
+1. Decision rule: $\text{sign}(w^T x) \neq y$. \\
+2. Update rule:
+    \[
+    w_{t+1} = w_t + y_i x_i
+    \] \\
+3. PLA works when the data is linearly separable. \\
+
+\subsection{CNN}
+    \[
+    L_{\text{out}} = \frac{L_{\text{in}} + 2 \cdot \text{P} - \text{dilation} \cdot (K-1) - 1}{\text{S}} + 1
+    \]
+
+\subsection{Neural Network Optimization}
+\subsubsection{Loss Functions}
+    Multi-class SVM loss:
+    \[
+    L = \lambda \|w\|^2 + \sum_i \max(0, 1 - w^T x_i y_i)
+    \] \\
+    Probability distribution (softmax):
+    \[
+    L = \frac{e^{w^T x_j}}{\sum_k e^{w^T x_k}}
+    \]\\
+    Negative log-likelihood:
+    \[
+    L = \lambda \|w\|^2 + \sum_{k} - \log \frac{e^{w^T x_k}}{\sum_k e^{w^T x_k}}
+    \]
+
+\subsubsection{Optimization Techniques}
+1. \textbf{Grid Search:} bad for high dim $O(\text{samples per dimension}^{dim})$. \\
+2. \textbf{Random Search:} Simple and effective in high-dimensional spaces but does not guarantee finding the global optimum. \\
+3. \textbf{Gradient-Based Methods:} 
+        \[
+        w = w - \eta \nabla_w L(w)
+        \] \\
+   1) Follow the opposite direction of the gradient. \\
+   2) Subgradient: can be applied to convex, non-differentiable functions. For a convex function \( f: \mathbb{R}^n \to \mathbb{R} \), a vector \( g \in \mathbb{R}^n \) is called a \textbf{subgradient} of \( f \) at point \( x \) if the following inequality holds for all \( y \in \mathbb{R}^n \):
+    \[
+    f(y) \geq f(x) + g^\top (y - x)
+    \]
+
+
+\subsection{Gradient Descent}
+1. \textbf{Vanilla/Batech GD:}  all data \\
+2. \textbf{Stochastic:} single data pt per update.  \\
+3. \textbf{Mini-batch:} random subsets of data.
+
+\subsection{Underfitting and Overfitting}
+1. \textbf{Underfitting:} Poor on train/val due to high bias.  
+2. \textbf{Overfitting:} Good on train, poor on val due to high variance. (Remove data pts will cause large changes to the model.)
+
